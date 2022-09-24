@@ -1,5 +1,7 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const User = require("./models/user");
+const bcrypt = require("bcryptjs");
 
 passport.use(
   new LocalStrategy(
@@ -7,8 +9,6 @@ passport.use(
       username: "email",
       password: "password",
     },
-    function (email, password, done) {
-      return; // return user
-    }
+    (email, password, done) => {}
   )
 );
