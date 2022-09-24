@@ -51,3 +51,22 @@ exports.signUpPost = [
     });
   },
 ];
+
+exports.logInPost = (req, res, next) => {
+  passport.authenticate("local", { session: false }, (err, user, info) => {
+    if (err || !user) {
+      return res.status(400).json({
+        message: "error logging in user",
+        user: user,
+      });
+    }
+    req.login(user, { session: false }, (err) => {
+      if (err) {
+        res.send(err);
+      }
+      // generate a signed token with contents of user obj and return token
+      const token = jwt.sign(user, "cool_beans");
+      return res.json({ user, token });
+    });
+  });
+};
