@@ -10,7 +10,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: "cool_beans",
+      secretOrKey: process.env.SECRET_KEY,
     },
     (jwtPayload, done) => {
       // find user in db

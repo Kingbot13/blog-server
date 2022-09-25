@@ -65,7 +65,7 @@ exports.logInPost = (req, res, next) => {
         res.send(err);
       }
       // generate a signed token with contents of user obj and return token
-      const token = jwt.sign(user, "cool_beans");
+      const token = jwt.sign(user, process.env.SECRET_KEY);
       return res.json({ user, token });
     });
   });
