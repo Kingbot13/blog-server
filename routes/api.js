@@ -4,3 +4,5 @@ const apiController = require("../controllers/apiController");
 const router = express.Router();
 
 router.post("/sign-in", apiController.signUpPost);
+
+module.exports = router;

@@ -1,7 +1,28 @@
 const passport = require("passport");
+const passportJWT = require("passport-jwt");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const bcrypt = require("bcryptjs");
+const { ExtractJwt } = require("passport-jwt");
+const JWTStrategy = require(passportJWT.Strategy);
+
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: "cool_beans",
+    },
+    (jwtPayload, done) => {
+      // find user in db
+      User.findById(jwtPayload, (err, user) => {
+        if (err) {
+          return done(err);
+        }
+        return done(null, user);
+      });
+    }
+  )
+);
 
 passport.use(
   new LocalStrategy(
@@ -18,6 +39,9 @@ passport.use(
           return done(null, false, { message: "incorrect email" });
         }
         bcrypt.compare(password, user.password, (err, res) => {
+          if (err) {
+            return done(err);
+          }
           if (res) {
             return done(null, user);
           } else {
