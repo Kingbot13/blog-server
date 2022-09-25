@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const router = require("../routes/api");
 
 // handle new user registration
 exports.signUpPost = [
@@ -78,6 +79,16 @@ exports.postsGet = (req, res, next) => {
       return next(err);
     }
     res.status(200).json({ posts });
+  });
+};
+
+// get single post and comments
+exports.singlePostGet = (req, res, next) => {
+  Post.findById(req.params.id, (err, post) => {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json({ post });
   });
 };
 
