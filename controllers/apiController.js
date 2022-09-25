@@ -121,6 +121,37 @@ exports.postCreatePost = [
   },
 ];
 
+// handle post update
+exports.postUpdatePost = [
+  body("title", "title must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("content", "content must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    if (req.user) {
+      const errors = validationResult(req);
+      const post = new Post({
+        title: req.body.title,
+        content: req.body.content,
+        user: req.user.id,
+        date: req.body.date,
+        _id: req.params.id,
+        isPublished: req.body.publish,
+        comments: req.body.comments,
+      });
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ post, message: "error updating post" });
+      }
+      Post.findByIdAndUpdate(post._id);
+    } else {
+      return res
+        .status(403)
+        .json({ message: "You do not have access to this page" });
+    }
+  },
+];
+
 // handle comments form
 exports.commentCreatePost = [
   body("content", "content must not be empty")
@@ -131,12 +162,10 @@ exports.commentCreatePost = [
     if (req.user) {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res
-          .status(400)
-          .json({
-            content: req.body.content,
-            message: "error creating comment",
-          });
+        return res.status(400).json({
+          content: req.body.content,
+          message: "error creating comment",
+        });
       }
       Post.findByIdAndUpdate(
         req.body.postId,
