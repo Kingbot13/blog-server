@@ -152,6 +152,20 @@ exports.postUpdatePost = [
   },
 ];
 
+// handle post delete
+exports.postDeletePost = (req, res, next) => {
+  if (req.user) {
+    Post.findByIdAndRemove(req.params.id, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(200).json({ message: "success!" });
+    });
+  } else {
+    res.status(403).json({ message: "You do not have access to this page" });
+  }
+};
+
 // handle comments form
 exports.commentCreatePost = [
   body("content", "content must not be empty")
