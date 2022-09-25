@@ -113,3 +113,6 @@ exports.postCreatePost = [
     });
   },
 ];
+
+// handle comments form
+exports.commentCreatePost = [];
