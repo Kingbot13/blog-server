@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const router = require("../routes/api");
 
 // handle new user registration
 exports.signUpPost = [

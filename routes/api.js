@@ -1,5 +1,6 @@
 const express = require("express");
 const apiController = require("../controllers/apiController");
+const passport = require("passport");
 
 const router = express.Router();
 
@@ -12,15 +13,31 @@ router.get("/posts", apiController.postsGet);
 router.get("/posts/:id", apiController.singlePostGet);
 
 // handle create post
-router.post("/posts/create-posts", apiController.postCreatePost);
+router.post(
+  "/posts",
+  passport.authenticate("jwt", { session: false }),
+  apiController.postCreatePost
+);
 
 // handle create comment
-router.post("/posts/:id/create-comment", apiController.commentCreatePost);
+router.post(
+  "/posts/:id/create-comment",
+  passport.authenticate("jwt", { session: false }),
+  apiController.commentCreatePost
+);
 
 // handle post update
-router.post("/posts/:id/update", apiController.postUpdatePost);
+router.put(
+  "/posts/:id",
+  passport.authenticate("jwt", { session: false }),
+  apiController.postUpdatePost
+);
 
 // handle post delete
-router.post("posts/:id/delete", apiController.postDeletePost);
+router.delete(
+  "posts/:id",
+  passport.authenticate("jwt", { session: false }),
+  apiController.postDeletePost
+);
 
 module.exports = router;
