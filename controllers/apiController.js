@@ -70,3 +70,46 @@ exports.logInPost = (req, res, next) => {
     });
   });
 };
+
+// get posts and comments
+exports.postsGet = (req, res, next) => {
+  Post.find().exec((err, posts) => {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json({ posts });
+  });
+};
+
+// handle create post
+exports.postCreatePost = [
+  body("title", "title must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("content", "content must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const post = new Post({
+      title: req.body.title,
+      content: req.body.content,
+      date: new Date(),
+      author: req.user.id,
+      isPublished: req.body.publish || false,
+    });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ post, message: "error creating post" });
+    }
+    if (!req.user) {
+      return res
+        .status(400)
+        .json({ post, message: "error: no signed in user" });
+    }
+    // successful
+    post.save((err) => {
+      if (err) {
+        return next(err);
+      }
+    });
+  },
+];
