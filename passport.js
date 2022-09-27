@@ -5,7 +5,7 @@ const User = require("./models/user");
 const bcrypt = require("bcryptjs");
 const { ExtractJwt } = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
-
+// jwt strategy
 passport.use(
   new JWTStrategy(
     {
