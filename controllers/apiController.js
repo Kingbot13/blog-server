@@ -1,3 +1,4 @@
+require('dotenv').config();
 const User = require("../models/user");
 const Post = require("../models/post");
 const bcrypt = require("bcryptjs");
@@ -68,7 +69,7 @@ exports.logInPost = (req, res, next) => {
       const token = jwt.sign(user, process.env.SECRET_KEY);
       return res.json({ user, token });
     });
-  });
+  })(req, res);
 };
 
 // get posts and comments
