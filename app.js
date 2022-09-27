@@ -7,6 +7,7 @@ var logger = require("morgan");
 const mongoose = require("mongoose");
 require("./passport");
 const passport = require("passport");
+const cors = require("cors");
 
 mongoose.connect(process.env.CONNECTION, {
   useUnifiedTopology: true,
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(cors());
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/api", apiRouter);
