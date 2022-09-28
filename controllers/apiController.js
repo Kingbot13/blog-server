@@ -1,4 +1,3 @@
-require('dotenv').config();
 const User = require("../models/user");
 const Post = require("../models/post");
 const bcrypt = require("bcryptjs");
@@ -49,6 +48,7 @@ exports.signUpPost = [
           return next(err);
         }
       });
+      return res.status(200).json({ user });
     });
   },
 ];
