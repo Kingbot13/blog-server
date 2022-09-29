@@ -1,4 +1,3 @@
-require('dotenv').config();
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const LocalStrategy = require("passport-local");
@@ -15,7 +14,7 @@ passport.use(
     },
     (jwtPayload, done) => {
       // find user in db
-      User.findById(jwtPayload, (err, user) => {
+      User.findById(jwtPayload.id, (err, user) => {
         if (err) {
           return done(err);
         }
