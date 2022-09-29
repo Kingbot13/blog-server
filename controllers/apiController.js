@@ -100,35 +100,24 @@ exports.postCreatePost = [
     .isLength({ min: 1 })
     .escape(),
   (req, res, next) => {
-    if (req.user) {
-      const errors = validationResult(req);
-      const post = new Post({
-        title: req.body.title,
-        content: req.body.content,
-        date: new Date(),
-        author: req.user.id,
-        isPublished: req.body.publish || false,
-      });
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ post, message: "error creating post" });
-      }
-      if (!req.user) {
-        return res
-          .status(400)
-          .json({ post, message: "error: no signed in user" });
-      }
-      // successful
-      post.save((err) => {
-        if (err) {
-          return next(err);
-        }
-        res.status(200).json({ post });
-      });
-    } else {
-      return res
-        .status(403)
-        .json({ message: "You do not have access to this page" });
+    const errors = validationResult(req);
+    const post = new Post({
+      title: req.body.title,
+      content: req.body.content,
+      date: new Date(),
+      author: req.user.id,
+      isPublished: req.body.publish || false,
+    });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ post, message: "error creating post" });
     }
+    // successful
+    post.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.status(200).json({ post });
+    });
   },
 ];
 

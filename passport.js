@@ -14,7 +14,7 @@ passport.use(
     },
     (jwtPayload, done) => {
       // find user in db
-      User.findById(jwtPayload.id, (err, user) => {
+      User.findById(jwtPayload._id, (err, user) => {
         if (err) {
           return done(err);
         }
