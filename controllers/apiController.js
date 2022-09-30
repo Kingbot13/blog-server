@@ -106,7 +106,7 @@ exports.postCreatePost = [
       content: req.body.content,
       date: new Date(),
       author: req.user.id,
-      isPublished: req.body.publish || false,
+      isPublished: req.body.publish === "on" ? true : false,
     });
     if (!errors.isEmpty()) {
       return res.status(400).json({ post, message: "error creating post" });
